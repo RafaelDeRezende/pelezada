@@ -1,0 +1,12 @@
+Nacho - 1
+Clément - 2
+Kentinho - 2
+Thiago - 1
+Pao - 2
+Guilliam - 2 
+Natan - 1
+Maxime - 2
+Daniel - 1 
+Moussa - 1
+date 22/02/2025
+result - 2 - +3
