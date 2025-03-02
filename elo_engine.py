@@ -15,17 +15,28 @@ def calculate_elo(player_ratings, game_data, k_factor=32):
     - Updated player_ratings (dict)
     """
     teams = game_data['teams']
+
+    for team_num, players in teams.items():
+        assert len(players) == len(set(players)), f"Duplicate players in team {team_num}"
+        assert len(players) == 5, f"Team {team_num} has {len(players)} players, expected 5 {game_data}"
+    assert len(teams) == 2, f"Expected 2 teams, got {len(teams)}"
+
+    print(teams)
     result = game_data['result']
+    print(result)
     winning_team = result['winning_team']
     score_diff = int(result['score'])  # Score is already parsed as int
 
     # Determine score multiplier
-    if score_diff < 3:
+    if 3 > score_diff > 0:
         score_multiplier = 1      # Simple win
-    elif 3 <= score_diff <= 5:
+    elif 3 <= score_diff < 5:
         score_multiplier = 1.5    # Strong win
-    else:
+    elif score_diff >= 5:
         score_multiplier = 2      # Massacre
+    else:
+        score_multiplier = 0 # draw
+
 
     # Calculate average ELO per team
     team_elos = {}
