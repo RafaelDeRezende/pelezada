@@ -18,8 +18,14 @@ def calculate_elo(player_ratings, game_data, k_factor=32):
 
     for team_num, players in teams.items():
         assert len(players) == len(set(players)), f"Duplicate players in team {team_num}"
-        assert len(players) == 5, f"Team {team_num} has {len(players)} players, expected 5 {game_data}"
     assert len(teams) == 2, f"Expected 2 teams, got {len(teams)}"
+
+    # Assert both teams have the same number of players
+
+    teams_keys = list(teams.keys())
+
+    assert len(teams[teams_keys[0]]) == len(teams[teams_keys[1]]), "Both teams must have the same number of players"
+
 
     print(teams)
     result = game_data['result']
