@@ -1,6 +1,7 @@
 from match_parser import yield_match_data
 import datetime
 
+_guest_players = ['Ben Ben']
 
 def calculate_elo(player_ratings, game_data, k_factor=32):
     """
@@ -77,6 +78,11 @@ def generate_leaderboard(player_ratings):
     """
     # Round ELO scores
     rounded_ratings = {player: round(elo) for player, elo in player_ratings.items()}
+
+    # Remove guest players from leaderboard
+    for guest_player in _guest_players:
+        if guest_player in rounded_ratings:
+            del rounded_ratings[guest_player]
 
     # Sort players by ELO (highest first)
     sorted_players = sorted(rounded_ratings.items(), key=lambda x: x[1], reverse=True)
