@@ -205,12 +205,19 @@ if __name__ == '__main__':
         print(len(players))
         teams = build_teams(players, player_ratings)
 
-        print("Team 1")
+
+        elo_avg = sum([player_ratings[player] for player in teams[0][0]]) / 5
+        print(f"Team 1 ELO: {elo_avg}")
+        print("### Team 1 ### - ELO: ", int(elo_avg))
+
+
         for player in teams[0][0]:
-            print(player)
-        print("Team 2")
+            print(f"{player}")
+
+        elo_avg = sum([player_ratings[player] for player in teams[0][1]]) / 5
+        print("### Team 2 ### - ELO: ", int(elo_avg))
         for player in teams[0][1]:
-            print(player)
+            print(f"{player}")
 
 
 
