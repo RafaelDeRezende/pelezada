@@ -1,7 +1,79 @@
 from match_parser import yield_match_data
 import datetime
+import itertools
+from typing import List, Dict, Tuple
 
 _guest_players = ['Ben Ben']
+
+
+def build_teams(players: List[str], player_ratings: Dict[str, int], num_teams: int = 2) -> Tuple[List[List[str]], float]:
+    """
+    Build balanced teams based on player ELO ratings.
+
+    Args:
+        players: List of player names loaded from the file
+        player_ratings: Dictionary mapping player names to their ELO ratings
+        num_teams: Number of teams (2 or 3), default is 2
+
+    Returns:
+        Tuple containing the best team combination and the minimum ELO difference
+
+    Raises:
+        ValueError: If num_teams is not 2 or 3, or if the number of players is incorrect
+    """
+    # Validate number of teams
+    if num_teams not in [2, 3]:
+        raise ValueError("Number of teams must be 2 or 3")
+
+    # Check if the number of players matches the requirement
+    required_players = 5 * num_teams
+    if len(players) != required_players:
+        raise ValueError(f"Expected {required_players} players for {num_teams} teams, got {len(players)}")
+
+    # Add missing players with default ELO of 1000
+    for player in players:
+        if player not in player_ratings:
+            player_ratings[player] = 1000
+            print(f"Player {player} not found in player_ratings, adding with 1000 ELO")
+
+    # Helper function to calculate team ELO
+    def team_elo(team):
+        return sum(player_ratings[p] for p in team)
+
+    best_teams = None
+    min_diff = float('inf')
+
+    if num_teams == 2:
+        # Generate all possible team 1 combinations (5 players)
+        for team1 in itertools.combinations(players, 5):
+            team1 = list(team1)
+            team2 = [p for p in players if p not in team1]
+            elo1 = team_elo(team1)
+            elo2 = team_elo(team2)
+            diff = abs(elo1 - elo2)
+            if diff < min_diff:
+                min_diff = diff
+                best_teams = [team1, team2]
+    elif num_teams == 3:
+        # Generate all possible team 1 and team 2 combinations
+        for team1 in itertools.combinations(players, 5):
+            team1 = list(team1)
+            remaining = [p for p in players if p not in team1]
+            for team2 in itertools.combinations(remaining, 5):
+                team2 = list(team2)
+                team3 = [p for p in remaining if p not in team2]
+                elo1 = team_elo(team1)
+                elo2 = team_elo(team2)
+                elo3 = team_elo(team3)
+                diff = max(elo1, elo2, elo3) - min(elo1, elo2, elo3)
+                if diff < min_diff:
+                    min_diff = diff
+                    best_teams = [team1, team2, team3]
+
+    return best_teams, min_diff
+
+
+
 
 def calculate_elo(player_ratings, game_data, k_factor=32):
     """
@@ -119,11 +191,29 @@ def generate_leaderboard(player_ratings):
 
 if __name__ == '__main__':
 
+    generate_learderboard = False
+
     player_ratings = {}
     for game_data in yield_match_data():
         calculate_elo(player_ratings, game_data)
 
-    print(generate_leaderboard(player_ratings))
+    if generate_learderboard:
+        print(generate_leaderboard(player_ratings))
+    else:
+        with open('team_builder/players.txt', 'r') as file:
+            players = file.read().splitlines()
+        print(len(players))
+        teams = build_teams(players, player_ratings)
+
+        print("Team 1")
+        for player in teams[0][0]:
+            print(player)
+        print("Team 2")
+        for player in teams[0][1]:
+            print(player)
+
+
+
 
 
 
