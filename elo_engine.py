@@ -3,7 +3,7 @@ import datetime
 import itertools
 from typing import List, Dict, Tuple
 
-_guest_players = ['Ben Ben']
+_guest_players = ['Ben Ben', 'Krank Dzmitry']
 
 
 def build_teams(players: List[str], player_ratings: Dict[str, int], num_teams: int = 2) -> Tuple[List[List[str]], float]:
@@ -33,8 +33,8 @@ def build_teams(players: List[str], player_ratings: Dict[str, int], num_teams: i
     # Add missing players with default ELO of 1000
     for player in players:
         if player not in player_ratings:
-            player_ratings[player] = 1000
-            print(f"Player {player} not found in player_ratings, adding with 1000 ELO")
+            player_ratings[player] = 975
+            print(f"Player {player} not found in player_ratings, adding with 975 ELO")
 
     # Helper function to calculate team ELO
     def team_elo(team):
@@ -178,7 +178,6 @@ def generate_leaderboard(player_ratings):
 
         # Determine whether to display medal or rank number
         rank_display = medals_by_rank.get(rank, f"{rank}.")
-
         leaderboard.append(f"{rank_display} {player} - {elo} ELO")
 
         last_elo = elo
@@ -192,6 +191,7 @@ def generate_leaderboard(player_ratings):
 if __name__ == '__main__':
 
     generate_learderboard = False
+    num_teams = 3
 
     player_ratings = {}
     for game_data in yield_match_data():
@@ -203,7 +203,7 @@ if __name__ == '__main__':
         with open('team_builder/players.txt', 'r') as file:
             players = file.read().splitlines()
         print(len(players))
-        teams = build_teams(players, player_ratings)
+        teams = build_teams(players, player_ratings, num_teams=num_teams)
 
 
         elo_avg = sum([player_ratings[player] for player in teams[0][0]]) / 5
@@ -218,6 +218,12 @@ if __name__ == '__main__':
         print("### Team 2 ### - ELO: ", int(elo_avg))
         for player in teams[0][1]:
             print(f"{player}")
+
+        if num_teams == 3:
+            elo_avg = sum([player_ratings[player] for player in teams[0][2]]) / 5
+            print("### Team 3 ### - ELO: ", int(elo_avg))
+            for player in teams[0][2]:
+                print(f"{player}")
 
 
 
