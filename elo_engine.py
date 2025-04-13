@@ -190,8 +190,8 @@ def generate_leaderboard(player_ratings):
 
 if __name__ == '__main__':
 
-    generate_learderboard = False
-    num_teams = 3
+    generate_learderboard = True
+    num_teams = 2
 
     player_ratings = {}
     for game_data in yield_match_data():
