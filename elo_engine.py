@@ -3,7 +3,7 @@ import datetime
 import itertools
 from typing import List, Dict, Tuple
 
-_guest_players = ['Ben Ben', 'Krank Dzmitry']
+_guest_players = ['Ben Ben', 'Dzmitry']
 
 
 def build_teams(players: List[str], player_ratings: Dict[str, int], num_teams: int = 2) -> Tuple[List[List[str]], float]:
@@ -156,6 +156,11 @@ def generate_leaderboard(player_ratings):
         if guest_player in rounded_ratings:
             del rounded_ratings[guest_player]
 
+    # Remove players with name containing Krank
+    for player in list(rounded_ratings.keys()):
+        if 'Krank' in player:
+            del rounded_ratings[player]
+
     # Sort players by ELO (highest first)
     sorted_players = sorted(rounded_ratings.items(), key=lambda x: x[1], reverse=True)
 
@@ -193,7 +198,11 @@ if __name__ == '__main__':
     generate_learderboard = True
     num_teams = 2
 
-    player_ratings = {}
+    # These players get an initial ELO of 950 (not to overly unbalance the teams)
+    player_ratings = {
+        "Gio": 950,
+        "Marcelo B": 950,
+    }
     for game_data in yield_match_data():
         calculate_elo(player_ratings, game_data)
 
