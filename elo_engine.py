@@ -195,7 +195,7 @@ def generate_leaderboard(player_ratings):
 
 if __name__ == '__main__':
 
-    generate_learderboard = True
+    generate_learderboard = False
     num_teams = 2
 
     # These players get an initial ELO of 950 (not to overly unbalance the teams)
