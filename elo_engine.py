@@ -202,6 +202,8 @@ if __name__ == '__main__':
     player_ratings = {
         "Gio": 950,
         "Marcelo B": 950,
+        "Pedro": 850,
+        "Tomas": 850
     }
     for game_data in yield_match_data():
         calculate_elo(player_ratings, game_data)
