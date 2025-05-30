@@ -3,7 +3,7 @@ import datetime
 import itertools
 from typing import List, Dict, Tuple
 
-_guest_players = ['Ben Ben', 'Dzmitry']
+_guest_players = ['Ben Ben', 'Dzmitry', 'Pedro', 'Tomas']
 
 
 def build_teams(players: List[str], player_ratings: Dict[str, int], num_teams: int = 2) -> Tuple[List[List[str]], float]:
@@ -202,8 +202,9 @@ if __name__ == '__main__':
     player_ratings = {
         "Gio": 950,
         "Marcelo B": 950,
-        "Pedro": 850,
-        "Tomas": 850
+        "Pedro": 950,
+        "Tomas": 950,
+        "Fernando": 1000,
     }
     for game_data in yield_match_data():
         calculate_elo(player_ratings, game_data)
